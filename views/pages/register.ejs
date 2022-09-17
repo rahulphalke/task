@@ -1,0 +1,74 @@
+
+  <%- include('../partials/header'); %>
+  <div class="body-wrapper pt-4" >
+      <div class="jumbotron ">
+          <h1 class="text-center">Register A User</h1>
+          <div class="container" >
+          
+            <form class="row g-3 needs-validation"  method="post" action="save-user">
+                <div class="col-md-6">
+                  <label for="validationCustom01" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="validationCustom01"  required name="name">
+                </div>
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email"  required name="email">
+                  <span id="email_msg"></span>
+                </div>
+            
+                <div class="col-md-6">
+                    <label for="mobile_number" class="form-label">mobile</label>
+                    <input type="number" class="form-control" id="mobile_number"  required name="phone">
+                </div>
+              
+
+                
+                <div class="col-md-6">
+                    <label for="validationCustom03" class="form-label">State</label>
+                    <input type="text" class="form-control" id="validationCustom03" required name="state">
+                  </div>
+
+                <div class="col-md-6">
+                  <label for="validationCustom03" class="form-label">City</label>
+                  <input type="text" class="form-control" id="validationCustom03" required name="city">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="validationCustom05" class="form-label">Zip</label>
+                  <input type="text" class="form-control" id="validationCustom05" required name="zip"> 
+                </div>
+               
+                <div class="col-12">
+                  <button class="btn btn-primary" type="submit" id="submit_btn" >Submit form</button>
+                </div>
+              </form>
+          </div>
+        </div>
+  </div>
+<%- include('../partials/footer'); %>
+
+  <script>
+    $(function(){
+        $('#email').on('change',function(){
+            let email = $(this).val();
+            $.ajax({
+                type:'POST',
+                url: 'check-email',
+                data:{email:email},
+                success:function(response){
+
+                    if(response.is_valid){
+                        $("#email_msg").html("<div class='text-success' >new Email</div>")
+                    }else{
+                        $("#email_msg").html("<div class='text-danger' >Already In Use</div>")
+                        $("#submit_btn").attr("disabled", true);
+                    }
+
+                },
+                error:function(e){
+                    console.log('Something Went Wrong Please Try Again')
+                }
+            })
+        })
+    })
+  </script>
