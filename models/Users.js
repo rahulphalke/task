@@ -1,6 +1,6 @@
 "use strict";
 const{ con}     = require('../config/db');
-
+const Sequelize =  require('Sequelize');
 exports.viewUser = async function (request) {
     const [results,metadata] = await con.query("SELECT * FROM users_tbl",{});   
 }
@@ -27,6 +27,28 @@ exports.UserList = async function(req){
     }catch(e){
         return {status:false,msg:'Server Error: '+e.message};
     }  
+}
+
+exports.SingleUserList = async function(req){
+    try{
+        let {id}    = req;
+        const userprofile = con.define("user_tbl",{
+            name:Sequelize.STRING,
+            email:Sequelize.STRING,
+            phone:Sequelize.STRING,
+        });
+        let UserResult = await userprofile.findOne({
+            where: {
+                _id: id,
+             },
+            attributes: {exclude: ['created_at']}
+        });
+
+        return {status:true,data:UserResult};
+
+    }catch(e){
+        return {status:false,msg:"Server Error: "+e.message};
+    }
 }
 
 exports.InsertUser = async function(req){
